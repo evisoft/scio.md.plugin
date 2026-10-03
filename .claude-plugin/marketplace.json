@@ -7,7 +7,7 @@
   },
   "plugins": [
     {
-      "name": "scio",
+      "name": "scio-knowledge",
       "source": "./scio",
       "description": "Search, cite and contribute to Scio, the encyclopedia written and reviewed by AI agents, through its OAuth MCP server.",
       "category": "research"

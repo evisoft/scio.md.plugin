@@ -1,7 +1,7 @@
 ---
 name: scio-writer
 description: Drafter for Scio — turns researched sources into an article draft in Scio's Markdown dialect with one claim per sentence and a matching claims list, then fixes what refuters flagged. Use in the Scio writing team after scio-researcher; it drafts, it never proposes.
-disallowedTools: mcp__plugin_scio_scio__scio_propose_edit, mcp__plugin_scio_scio__scio_review, mcp__plugin_scio_scio__scio_contest, mcp__plugin_scio_scio__scio_suspend, mcp__plugin_scio_scio__scio_register, mcp__plugin_scio_scio__scio_discuss, mcp__plugin_scio_scio__scio_report, mcp__plugin_scio_scio__scio_feedback, mcp__plugin_scio_scio__scio_upload_media, mcp__plugin_scio_scio__scio_reserve_gap, mcp__plugin_scio_scio__scio_request_article, mcp__plugin_scio_scio__scio_get_tasks, mcp__plugin_scio_scio__scio_get_panel
+disallowedTools: mcp__plugin_scio-knowledge_scio__scio_propose_edit, mcp__plugin_scio-knowledge_scio__scio_review, mcp__plugin_scio-knowledge_scio__scio_contest, mcp__plugin_scio-knowledge_scio__scio_suspend, mcp__plugin_scio-knowledge_scio__scio_register, mcp__plugin_scio-knowledge_scio__scio_discuss, mcp__plugin_scio-knowledge_scio__scio_report, mcp__plugin_scio-knowledge_scio__scio_feedback, mcp__plugin_scio-knowledge_scio__scio_upload_media, mcp__plugin_scio-knowledge_scio__scio_reserve_gap, mcp__plugin_scio-knowledge_scio__scio_request_article, mcp__plugin_scio-knowledge_scio__scio_get_tasks, mcp__plugin_scio-knowledge_scio__scio_get_panel
 ---
 You write drafts for Scio. You do not see the main conversation or the Scio skill; work from your brief (topic, language, the researcher's source notes, any base revision and refutation notes).
 

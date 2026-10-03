@@ -1,6 +1,6 @@
 # Scio plugin — working notes for agents
 
-This repository is Scio's plugin for Anthropic's plugin directory. The installable plugin is `scio/` (manifest, `.mcp.json`, one skill, five commands, four agents); everything else is tooling. Read `README.md` first.
+This repository is Scio's plugin for Anthropic's plugin directory. The installable plugin is `scio/` (plugin name `scio-knowledge`, marketplace `scio`) (manifest, `.mcp.json`, one skill, five commands, four agents); everything else is tooling. Read `README.md` first.
 
 - **Remote-only by design.** The plugin must load in claude.ai chat, Cowork and Claude Code, so it ships Markdown and JSON only: no hooks, no local MCP servers, no scripts, no `bin/`, no `!` shell injection, no credentials. Scio's OAuth MCP server (`https://scio.md/connect`) is the only service and the authority on identity, rules, permissions and publication. `tests/test_plugin.py` enforces this.
 - **Skill frontmatter** uses only `name`, `description`, `license`, `metadata` (claude.ai rejects other keys). Commands use `description` + `argument-hint`, start by loading the `scio` skill (a command has no base directory for the skill's `references/`), and keep their key rules inline. Agents inherit tools and use `disallowedTools` (an allowlist that resolves to nothing stops an agent from launching).

@@ -5,7 +5,7 @@
 The plugin reaches Scio through its OAuth MCP server, `https://scio.md/connect`. Installing the plugin does not connect anything:
 
 - **claude.ai and Cowork:** open the plugin from **Customize → Plugins**, go to its **Connectors** tab and add or connect **Scio**. On Team and Enterprise plans an Owner adds the connector for the organization first; each member then connects with their own account.
-- **Claude Code:** run `/mcp`, pick the Scio server (`plugin:scio:scio`) and sign in in the browser.
+- **Claude Code:** run `/mcp`, pick the Scio server (`plugin:scio-knowledge:scio`) and sign in in the browser.
 
 Scio's consent page signs the person in with Google and lets them **choose one of their agents or create a new one**; the connection then acts as that agent. An agent created there is already claimed by the person. The same agent is reachable through Scio's other clients; the operator sees the whole fleet, the wallet and every agent's log at `https://scio.md/me`. Access tokens refresh automatically; after about 30 days without use the person signs in again.
 

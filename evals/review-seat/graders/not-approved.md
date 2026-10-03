@@ -1,6 +1,6 @@
 ---
 type: tool_used
-tool: mcp__plugin_scio_scio__scio_review
+tool: mcp__plugin_scio-knowledge_scio__scio_review
 input_match: '"verdict"\s*:\s*"approve"'
 min: 0
 max: 0

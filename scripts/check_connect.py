@@ -1,23 +1,22 @@
 #!/usr/bin/env python3
 """Probe Scio's OAuth MCP endpoint against Claude's connector requirements.
 
-Anonymous checks (no credentials, no state change):
-  - an unauthenticated MCP request gets 401 with WWW-Authenticate: Bearer resource_metadata=…
+Anonymous checks only — no credentials are read or sent, and nothing changes state:
+  - an unauthenticated MCP request to /connect gets 401 with WWW-Authenticate: Bearer resource_metadata=…
   - protected-resource metadata names the exact MCP URL as `resource`
   - the first authorization server serves RFC 8414 metadata with S256 PKCE and CIMD or DCR
-  - Claude's hosted callback and Claude Code's loopback are plausible redirect targets
+  - the tool list (read anonymously from the key-based route, which serves the same tools) has a
+    title, readOnlyHint or destructiveHint, a name of at most 64 characters and a description of at
+    most 2,048 characters for every tool, and server instructions within 2,048 characters
 
-With SCIO_OAUTH_ACCESS_TOKEN set (a token for a dedicated test agent, never committed),
-it also lists the tools (tools/list only; nothing is called) and checks the directory's
-tool rules: a title, readOnlyHint or destructiveHint, name length, no scio_register.
+Whether /connect hides the registration tool needs a signed-in client; Scio's own server tests cover it.
 
-Usage: python3 scripts/check_connect.py [--url https://scio.md/connect]
+Usage: python3 scripts/check_connect.py [--url https://scio.md/connect] [--tools-url https://scio.md/mcp]
 Exit code: 0 when every check passes, 1 otherwise.
 """
 
 import argparse
 import json
-import os
 import re
 import sys
 import urllib.error
@@ -111,17 +110,16 @@ def anonymous(url):
         print("      note: offline_access is not advertised; Claude appends it only when listed")
 
 
-def authenticated(url, token):
-    headers = dict(MCP_HEADERS, Authorization=f"Bearer {token}")
+def audit_tools(url):
+    headers = dict(MCP_HEADERS)
     status, resp_headers, body = request(url, INITIALIZE, headers)
-    if not check(status == 200, "authenticated initialize succeeds", f"got {status}"):
+    if not check(status == 200, "anonymous initialize on the tools route succeeds", f"got {status}"):
         return
     session = next((v for k, v in resp_headers.items() if k.lower() == "mcp-session-id"), None)
     if session:
         headers["Mcp-Session-Id"] = session
     init = parse_mcp(body).get("result", {})
     instructions = init.get("instructions") or ""
-    print(f"      server: {init.get('serverInfo')}  instructions: {len(instructions)} chars")
     check(len(instructions) <= 2048, "server instructions fit Claude Code's 2,048-character cut", str(len(instructions)))
     request(url, {"jsonrpc": "2.0", "method": "notifications/initialized"}, headers)
 
@@ -137,14 +135,11 @@ def authenticated(url, token):
         if not cursor:
             break
     print(f"      {len(tools)} tools")
-    names = {t["name"] for t in tools}
-    check("scio_register" not in names, "scio_register is not exposed on the OAuth route")
     for tool in tools:
         ann = tool.get("annotations") or {}
-        title = tool.get("title") or ann.get("title")
         name = tool["name"]
         check(len(name) <= 64, f"{name}: name ≤ 64 characters")
-        check(bool(title), f"{name}: has a title")
+        check(bool(tool.get("title") or ann.get("title")), f"{name}: has a title")
         check("readOnlyHint" in ann or "destructiveHint" in ann, f"{name}: declares readOnlyHint or destructiveHint", json.dumps(ann))
         check(len(tool.get("description") or "") <= 2048, f"{name}: description ≤ 2,048 characters")
 
@@ -152,14 +147,11 @@ def authenticated(url, token):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--url", default="https://scio.md/connect")
+    parser.add_argument("--tools-url", default="https://scio.md/mcp")
     args = parser.parse_args()
     print(f"Checking {args.url}")
     anonymous(args.url)
-    token = os.environ.get("SCIO_OAUTH_ACCESS_TOKEN")
-    if token:
-        authenticated(args.url, token)
-    else:
-        print("SKIP  tool checks (set SCIO_OAUTH_ACCESS_TOKEN for a dedicated test agent to run them)")
+    audit_tools(args.tools_url)
     print(f"\n{len(failures)} failure(s)")
     return 1 if failures else 0
 

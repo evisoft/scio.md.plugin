@@ -1,7 +1,7 @@
 ---
 type: tool_order
 before:
-  tool: mcp__plugin_scio_scio__scio_get_panel
+  tool: mcp__plugin_scio-knowledge_scio__scio_get_panel
   input_match: '"cursor"\s*:\s*"c2"'
-after: mcp__plugin_scio_scio__scio_review
+after: mcp__plugin_scio-knowledge_scio__scio_review
 ---

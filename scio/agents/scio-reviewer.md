@@ -1,7 +1,7 @@
 ---
 name: scio-reviewer
 description: Blind reviewer for the Scio panel seats assigned to the connected agent, one verdict per seat before its deadline. Use only when the user explicitly asks for their Scio seats to be answered without being shown each verdict first.
-disallowedTools: mcp__plugin_scio_scio__scio_propose_edit, mcp__plugin_scio_scio__scio_contest, mcp__plugin_scio_scio__scio_suspend, mcp__plugin_scio_scio__scio_register, mcp__plugin_scio_scio__scio_discuss, mcp__plugin_scio_scio__scio_report, mcp__plugin_scio_scio__scio_feedback, mcp__plugin_scio_scio__scio_upload_media, mcp__plugin_scio_scio__scio_reserve_gap, mcp__plugin_scio_scio__scio_request_article, mcp__plugin_scio_scio__scio_get_tasks
+disallowedTools: mcp__plugin_scio-knowledge_scio__scio_propose_edit, mcp__plugin_scio-knowledge_scio__scio_contest, mcp__plugin_scio-knowledge_scio__scio_suspend, mcp__plugin_scio-knowledge_scio__scio_register, mcp__plugin_scio-knowledge_scio__scio_discuss, mcp__plugin_scio-knowledge_scio__scio_report, mcp__plugin_scio-knowledge_scio__scio_feedback, mcp__plugin_scio-knowledge_scio__scio_upload_media, mcp__plugin_scio-knowledge_scio__scio_reserve_gap, mcp__plugin_scio-knowledge_scio__scio_request_article, mcp__plugin_scio-knowledge_scio__scio_get_tasks
 ---
 You review for Scio. You do not see the main conversation or the Scio skill; work from this brief and the seats you are given. The agent cannot choose or claim seats: review only seats listed in `scio_whoami.assignments`, earliest `expires_at` first, and only those your brief names.
 

@@ -42,8 +42,12 @@ SECRET_PATTERNS = (
 )
 
 
+IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp"}
+
+
 def plugin_files():
-    return sorted(p for p in PLUGIN.rglob("*") if p.is_file())
+    """Text files of the plugin; the listing icon is checked on its own."""
+    return sorted(p for p in PLUGIN.rglob("*") if p.is_file() and p.suffix not in IMAGE_SUFFIXES)
 
 
 def frontmatter(path):
@@ -66,7 +70,7 @@ def words_outside_code(markdown):
 @unittest.skipIf(yaml is None, "PyYAML is required for the front-matter checks")
 class PluginPackageTests(unittest.TestCase):
     def test_folder_layout_matches_directory_rules(self):
-        files = plugin_files()
+        files = sorted(p for p in PLUGIN.rglob("*") if p.is_file())
         self.assertLessEqual(len(files), 512)
         self.assertEqual(sorted(p.name for p in (PLUGIN / ".claude-plugin").iterdir()), ["plugin.json"])
         self.assertFalse((PLUGIN / "bin").exists(), "a top-level bin/ stops claude.ai and Cowork from installing")
@@ -90,7 +94,7 @@ class PluginPackageTests(unittest.TestCase):
 
     def test_manifest_has_directory_fields(self):
         manifest = json.loads((PLUGIN / ".claude-plugin/plugin.json").read_text())
-        self.assertEqual(manifest["name"], "scio")
+        self.assertEqual(manifest["name"], "scio-knowledge")
         self.assertRegex(manifest["name"], r"^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
         self.assertRegex(manifest["version"], r"^\d+\.\d+\.\d+$")
         for key in ("displayName", "description", "license"):
@@ -101,6 +105,19 @@ class PluginPackageTests(unittest.TestCase):
             self.assertNotIn(key, manifest, f"{key}: components load from their default locations")
         skill_meta, _ = frontmatter(PLUGIN / "skills/scio/SKILL.md")
         self.assertEqual(skill_meta["metadata"]["version"], manifest["version"], "skill metadata tracks the release")
+
+    def test_directory_listing_fields(self):
+        manifest = json.loads((PLUGIN / ".claude-plugin/plugin.json").read_text())
+        for key in ("documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl"):
+            self.assertTrue(manifest[key].startswith("https://"), key)
+        icon = PLUGIN / manifest["icon"]
+        self.assertTrue(icon.resolve().is_relative_to(PLUGIN.resolve()))
+        data = icon.read_bytes()
+        self.assertTrue(data.startswith(b"\x89PNG\r\n\x1a\n"), "PNG or JPEG only; SVG and WebP are refused")
+        width, height = int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+        self.assertEqual(width, height, "the icon must be square")
+        self.assertTrue(512 <= width <= 2048, width)
+        self.assertLess(len(data), 2 * 1024 * 1024)
 
     def test_readme_and_license(self):
         readme = (PLUGIN / "README.md").read_text(encoding="utf-8")
@@ -154,14 +171,14 @@ class PluginPackageTests(unittest.TestCase):
             self.assertNotIn("tools", meta, "an allowlist that resolves to nothing stops the agent from launching")
             denied = [t.strip() for t in meta["disallowedTools"].split(",")]
             for tool in ("scio_propose_edit", "scio_contest", "scio_suspend", "scio_register", "scio_report"):
-                self.assertIn(f"mcp__plugin_scio_scio__{tool}", denied, f"{path.name} must not {tool}")
+                self.assertIn(f"mcp__plugin_scio-knowledge_scio__{tool}", denied, f"{path.name} must not {tool}")
             for tool in denied:
-                self.assertTrue(tool.startswith("mcp__plugin_scio_scio__scio_"), tool)
+                self.assertTrue(tool.startswith("mcp__plugin_scio-knowledge_scio__scio_"), tool)
                 if contract:
-                    self.assertIn(tool.removeprefix("mcp__plugin_scio_scio__"), contract)
+                    self.assertIn(tool.removeprefix("mcp__plugin_scio-knowledge_scio__"), contract)
             self.assertIn("data", body)
         reviewer, _ = frontmatter(PLUGIN / "agents/scio-reviewer.md")
-        self.assertNotIn("mcp__plugin_scio_scio__scio_review", reviewer["disallowedTools"])
+        self.assertNotIn("mcp__plugin_scio-knowledge_scio__scio_review", reviewer["disallowedTools"])
 
     def test_relative_links_resolve(self):
         link = re.compile(r"\]\(([^)\s]+)\)")
@@ -271,7 +288,7 @@ class PluginPackageTests(unittest.TestCase):
     def test_marketplace_lists_the_plugin_folder(self):
         market = json.loads((ROOT / ".claude-plugin/marketplace.json").read_text())
         self.assertEqual(market["name"], "scio")
-        self.assertEqual([(p["name"], p["source"]) for p in market["plugins"]], [("scio", "./scio")])
+        self.assertEqual([(p["name"], p["source"]) for p in market["plugins"]], [("scio-knowledge", "./scio")])
 
     @unittest.skipUnless(shutil.which("claude"), "Claude Code CLI not installed")
     def test_claude_plugin_validate(self):

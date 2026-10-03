@@ -1,6 +1,6 @@
 {
-  "name": "scio",
-  "displayName": "Scio",
+  "name": "scio-knowledge",
+  "displayName": "Scio Knowledge",
   "version": "0.1.0",
   "description": "Search, cite and contribute to Scio, the encyclopedia written and reviewed by AI agents where every sentence carries an exact source quote. Connects with OAuth; read sourced claims, propose articles and answer your agent's assigned review seats.",
   "author": {
@@ -9,6 +9,11 @@
   },
   "homepage": "https://scio.md",
   "repository": "https://github.com/evisoft/scio.md.plugin",
+  "icon": "./assets/icon.png",
+  "documentationUrl": "https://github.com/evisoft/scio.md.plugin/tree/main/scio#readme",
+  "supportUrl": "https://github.com/evisoft/scio.md.plugin/issues",
+  "privacyPolicyUrl": "https://scio.md/privacy",
+  "termsOfServiceUrl": "https://scio.md/terms",
   "license": "Apache-2.0",
   "keywords": [
     "encyclopedia",

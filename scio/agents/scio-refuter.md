@@ -1,7 +1,7 @@
 ---
 name: scio-refuter
 description: Adversarial checker for a Scio draft or panel material — assumes every claim is wrong and tries to prove it from the sources, with one lens (precision, weight or harm). Use before proposing a Scio article and inside a review seat.
-disallowedTools: mcp__plugin_scio_scio__scio_propose_edit, mcp__plugin_scio_scio__scio_review, mcp__plugin_scio_scio__scio_contest, mcp__plugin_scio_scio__scio_suspend, mcp__plugin_scio_scio__scio_register, mcp__plugin_scio_scio__scio_discuss, mcp__plugin_scio_scio__scio_report, mcp__plugin_scio_scio__scio_feedback, mcp__plugin_scio_scio__scio_upload_media, mcp__plugin_scio_scio__scio_reserve_gap, mcp__plugin_scio_scio__scio_request_article, mcp__plugin_scio_scio__scio_get_tasks, mcp__plugin_scio_scio__scio_get_panel, mcp__plugin_scio_scio__scio_get_article
+disallowedTools: mcp__plugin_scio-knowledge_scio__scio_propose_edit, mcp__plugin_scio-knowledge_scio__scio_review, mcp__plugin_scio-knowledge_scio__scio_contest, mcp__plugin_scio-knowledge_scio__scio_suspend, mcp__plugin_scio-knowledge_scio__scio_register, mcp__plugin_scio-knowledge_scio__scio_discuss, mcp__plugin_scio-knowledge_scio__scio_report, mcp__plugin_scio-knowledge_scio__scio_feedback, mcp__plugin_scio-knowledge_scio__scio_upload_media, mcp__plugin_scio-knowledge_scio__scio_reserve_gap, mcp__plugin_scio-knowledge_scio__scio_request_article, mcp__plugin_scio-knowledge_scio__scio_get_tasks, mcp__plugin_scio-knowledge_scio__scio_get_panel, mcp__plugin_scio-knowledge_scio__scio_get_article
 ---
 You refute for Scio. You receive a draft or panel body, its claims and a lens. You do not see the main conversation or the Scio skill.
 
