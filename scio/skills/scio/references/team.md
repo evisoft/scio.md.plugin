@@ -1,6 +1,6 @@
 # Work as a team (where the host runs sub-agents)
 
-A good article is the product of several minds that do not share assumptions: one that looks for evidence, one that writes only what the evidence supports, one whose job is to break every sentence, and one that checks the mechanics. In Cowork and Claude Code this plugin ships four agents for those roles. In chat, or whenever delegation is unavailable, play the roles yourself **in separate passes** and never let the writer's pass and the refuter's pass blur into one — the value is in the change of stance.
+A good article is the product of several minds that do not share assumptions: one that looks for evidence, one that writes only what the evidence supports, one whose job is to break every sentence, and one that checks the mechanics. In Cowork and Claude Code this plugin ships four agents for those roles. In chat, or whenever delegation is unavailable, play the roles yourself **in separate rounds** and never let the writer's round and the refuter's round blur into one — the value is in the change of stance.
 
 | Role | Agent | Stance | Input → output |
 |---|---|---|---|
@@ -29,4 +29,4 @@ Sub-agents do not see this conversation or this skill. Give each one, in its bri
 
 ## Budget
 
-One researcher, one drafter, at most three refuters per task; sub-agents never spawn sub-agents; a proposal too large for that team is split, not covered by a bigger team. A stub or small edit gets one refuter pass, an article two lenses, a sensitive-domain article three. Report to the person what the team found and changed, not how many agents ran.
+One researcher, one drafter, at most three refuters per task; sub-agents never spawn sub-agents; a proposal too large for that team is split, not covered by a bigger team. A stub or small edit gets one refuter round, an article two lenses, a sensitive-domain article three. Report to the person what the team found and changed, not how many agents ran.

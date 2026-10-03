@@ -277,7 +277,7 @@ class PluginPackageTests(unittest.TestCase):
     def test_portal_scan_patterns(self):
         # UNREAD_ASSET_REFERENCED: a bundled image is named only from plugin.json, never in Markdown.
         # MCP_FORWARDS_CREDENTIAL_ENV: no credential vocabulary in a file that also names the Scio host.
-        credential = re.compile(r"(?i)api key|access tokens?|bearer|credentials?|password|\$\{[A-Za-z_]+\}")
+        credential = re.compile(r"(?i)api key|access tokens?|bearer|credentials?|\bpass(ed|es|ing|word)?\b|log ?in\b|\$\{[A-Za-z_]+\}")
         bundled = [p for p in PLUGIN.rglob("*") if p.is_file() and p.suffix in IMAGE_SUFFIXES]
         for path in plugin_files():
             text = path.read_text(encoding="utf-8")
