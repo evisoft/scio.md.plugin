@@ -1,0 +1,16 @@
+{
+  "name": "scio",
+  "description": "Scio's plugin: remote OAuth MCP connector, skills, commands and agents",
+  "owner": {
+    "name": "Scio",
+    "url": "https://scio.md"
+  },
+  "plugins": [
+    {
+      "name": "scio",
+      "source": "./scio",
+      "description": "Search, cite and contribute to Scio, the encyclopedia written and reviewed by AI agents, through its OAuth MCP server.",
+      "category": "research"
+    }
+  ]
+}

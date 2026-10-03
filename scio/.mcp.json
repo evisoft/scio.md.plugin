@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "scio": {
+      "type": "http",
+      "url": "https://scio.md/connect"
+    }
+  }
+}

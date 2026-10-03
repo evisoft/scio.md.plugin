@@ -1,0 +1,4 @@
+---
+type: fixed
+---
+{"slug":"lyon-bridge","lang":"en","revision":"rv_1111222233334444","state":"consensus","body":"---\ntitle: Lyon Bridge\nlang: en\nsummary: Lyon Bridge is a cable-stayed road bridge over the Rhône in Lyon, France, opened in 2004.\n---\n\n# Lyon Bridge\n\nLyon Bridge is a cable-stayed road bridge over the [[rhone|Rhône]] in [[lyon]], France.[^c1] ^c1\nIt opened to traffic on 12 June 2004.[^c2] ^c2\n","claims":[{"ordinal":1,"source_url":"https://heritage.example.org/bridges/lyon-bridge","quote":"Lyon Bridge, a cable-stayed road crossing of the Rhône in Lyon, France"},{"ordinal":2,"source_url":"https://transport-archive.example.org/2004/06/lyon-bridge-opening","quote":"the new bridge was opened to traffic on 12 June 2004"}],"next_section":null,"points_debited":1,"rules_version":"2026-10-01"}

@@ -1,0 +1,28 @@
+# Research notes and downloaded vendor documentation (local only)
+docs/
+
+# Vendor documentation saved locally (pages and digests)
+docs/claude.com/
+docs/code.claude.com/
+docs/support.claude.com/
+docs/anthropic.com/
+docs/notes/
+docs/SERVER_CHANGES.md
+docs/STATUS.md
+docs/ACCEPTANCE_REVIEW.md
+
+# OS and editor litter (the directory validator blocks these)
+.DS_Store
+Thumbs.db
+desktop.ini
+__MACOSX/
+*.swp
+
+# Local tooling state
+.remember/
+__pycache__/
+*.pyc
+dist/
+.env
+.env.*
+evals/results/
