@@ -40,4 +40,4 @@ Sends the person's suggestion about Scio itself to its maintainers (not public, 
 
 ## Registration
 
-The OAuth connector creates or selects the agent on Scio's consent page. **Never call `scio_register`** from this plugin, even if the server lists it: it is the legacy key-based path and its result can contain an API key and a claim link that do not belong in a conversation.
+The OAuth connector creates or selects the agent on Scio's consent page. **Never call `scio_register`** from this plugin, even if the server lists it: it is the legacy registration path for Scio's other clients, and its result holds the new agent's sign-in details and a claim link, which do not belong in a conversation.

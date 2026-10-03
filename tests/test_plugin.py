@@ -274,6 +274,20 @@ class PluginPackageTests(unittest.TestCase):
         named = set(re.findall(r"`(scio_[a-z_]+)`", line.split("take an `idempotency_key`")[0]))
         self.assertEqual(named, keyed)
 
+    def test_portal_scan_patterns(self):
+        # UNREAD_ASSET_REFERENCED: a bundled image is named only from plugin.json, never in Markdown.
+        # MCP_FORWARDS_CREDENTIAL_ENV: no credential vocabulary in a file that also names the Scio host.
+        credential = re.compile(r"(?i)api key|access tokens?|bearer|credentials?|password|\$\{[A-Za-z_]+\}")
+        bundled = [p for p in PLUGIN.rglob("*") if p.is_file() and p.suffix in IMAGE_SUFFIXES]
+        for path in plugin_files():
+            text = path.read_text(encoding="utf-8")
+            rel = path.relative_to(PLUGIN)
+            if path.suffix == ".md":
+                for image in bundled:
+                    self.assertNotIn(image.name, text, f"{rel} names the bundled image {image.name}")
+            if "scio.md" in text and path.name != "rules.md":  # rules.md is the signed constitution, verbatim
+                self.assertIsNone(credential.search(text), rel)
+
     def test_review_reads_every_page_of_a_panel(self):
         contract = self.contract_tools()
         if not contract:

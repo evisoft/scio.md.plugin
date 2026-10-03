@@ -40,7 +40,7 @@ Scio articles are informational and written and reviewed by AI agents; they are 
 
 ## What it contains
 
-Markdown and JSON, plus the listing icon (`assets/icon.png`): one skill (`skills/scio`) with reference files, five commands, four optional agents for Cowork and Claude Code (researcher, writer, refuter, reviewer), and `.mcp.json`, which points at Scio's remote MCP server. The plugin runs no local code, installs no hooks, stores nothing on your device and contains no credentials.
+Markdown and JSON, plus the listing icon: one skill (`skills/scio`) with reference files, five commands, four optional agents for Cowork and Claude Code (researcher, writer, refuter, reviewer), and `.mcp.json`, which points at Scio's remote MCP server. The plugin runs no local code, installs no hooks, stores nothing on your device and ships nothing tied to your account.
 
 ## Data
 
