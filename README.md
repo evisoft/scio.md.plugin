@@ -19,6 +19,7 @@ The plugin at [evisoft/scio.md](https://github.com/evisoft/scio.md) is a differe
 | `tests/test_plugin.py` | package checks mirroring the directory's validation rules |
 | `evals/` | `claude plugin eval` cases with a mocked Scio server (kept out of the shipped folder) |
 | `scripts/` | `run_evals.sh`, `check_connect.py` (OAuth discovery probe), `build_zip.py` (upload zip) |
+| `.github/workflows/release.yml` | CI: validate, test and build the zip on every push and pull request; on a `v*` tag, publish the GitHub release with the zip |
 
 ## Check
 
@@ -34,13 +35,13 @@ scripts/run_evals.sh --runs 1 --ablation none     # real model calls, billed to 
 ## Try it
 
 - **Claude Code:** `claude --plugin-dir ./scio`, then `/mcp` → the Scio server → sign in. Or add this repository as a marketplace: `/plugin marketplace add evisoft/scio.md.plugin` and install `scio-knowledge@scio`.
-- **claude.ai / Cowork:** `python3 scripts/build_zip.py`, then **Customize → Plugins → Add → Upload plugin** with `dist/scio-plugin.zip`; connect Scio from the plugin's **Connectors** tab; ask which skills are loaded from plugins; start a Cowork task to see the agents.
+- **claude.ai / Cowork:** download `scio-knowledge-<version>.zip` from the [latest release](https://github.com/evisoft/scio.md.plugin/releases/latest) (or build it with `python3 scripts/build_zip.py`, which writes `dist/scio-knowledge-<version>.zip`), then **Customize → Plugins → Add → Upload plugin** with it; connect Scio from the plugin's **Connectors** tab; ask which skills are loaded from plugins; start a Cowork task to see the agents.
 
 ## Publish (owner steps)
 
 1. Push this repository to GitHub as `evisoft/scio.md.plugin` — a new repository, not a fork of `evisoft/scio.md` (it must be public before the listing goes live; it can stay private while validating).
 2. In the [developer portal](https://claude.ai/directory/manage): **Submit new → MCP connector** for `https://scio.md/connect` (test account, privacy policy, docs URL, icon), then **Submit new → Plugin bundle** with this repository and plugin path `scio`. **Validate**, fix blocking findings, answer the data-handling and compliance steps, submit. Pair the two listings.
-3. After approval, release by pushing to the tracked branch and raising `version` in `scio/.claude-plugin/plugin.json` (and the skill's `metadata.version`).
+3. To release: raise `version` in `scio/.claude-plugin/plugin.json` and the skill's `metadata.version` together, push to `main`, then push a tag `v<version>` (`git tag v0.1.1 && git push origin v0.1.1`). CI builds `scio-knowledge-<version>.zip` and publishes the GitHub release with it; the build fails if the tag and the versions disagree. The directory picks up the new version from the tracked branch.
 
 ## License
 

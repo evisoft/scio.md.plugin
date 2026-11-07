@@ -1,0 +1,109 @@
+name: Build and release
+
+# Every push and pull request: validate, test and build the upload zip (kept as a run artifact).
+# A pushed tag v<version>: the same, then publish the GitHub release with the zip attached.
+# The zip is never committed; dist/ is git-ignored.
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      zip: ${{ steps.zip.outputs.zip }}
+      sha256: ${{ steps.zip.outputs.sha256 }}
+      version: ${{ steps.zip.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install tools
+        run: |
+          python -m pip install --quiet pyyaml
+          npm install --global --silent @anthropic-ai/claude-code
+          claude --version
+
+      - name: Validate plugin and marketplace
+        run: |
+          claude plugin validate ./scio
+          claude plugin validate .
+
+      - name: Package tests
+        run: python -m unittest discover -s tests -v
+
+      - name: Build zip
+        id: zip
+        env:
+          TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || '' }}
+        run: |
+          if [ -n "$TAG" ]; then
+            python scripts/build_zip.py --tag "$TAG"
+          else
+            python scripts/build_zip.py
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugin-zip
+          path: ${{ steps.zip.outputs.zip }}
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: plugin-zip
+          path: dist
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.build.outputs.version }}
+          SHA256: ${{ needs.build.outputs.sha256 }}
+        run: |
+          ZIP="dist/scio-knowledge-${VERSION}.zip"
+          test -f "$ZIP"
+          cat > notes.md <<EOF
+          **Scio Knowledge** (\`scio-knowledge\`) ${VERSION} for claude.ai chat, Cowork and Claude Code.
+
+          ## Install
+
+          **claude.ai and Cowork:** download \`scio-knowledge-${VERSION}.zip\` below, then **Customize → Plugins → Add → Upload plugin**. Connect Scio from the plugin's **Connectors** tab and sign in.
+
+          **Claude Code** (2.1.275 or later):
+          \`\`\`
+          /plugin install scio-knowledge --marketplace evisoft/scio.md.plugin
+          \`\`\`
+          Then run \`/mcp\`, pick the Scio server and sign in.
+
+          ## Checksum
+
+          \`scio-knowledge-${VERSION}.zip\` SHA-256: \`${SHA256}\`
+          EOF
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" --clobber
+          else
+            gh release create "$TAG" "$ZIP" --verify-tag --title "Scio Knowledge ${VERSION}" --notes-file notes.md --generate-notes
+          fi
