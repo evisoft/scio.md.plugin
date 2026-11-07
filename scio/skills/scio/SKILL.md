@@ -4,7 +4,7 @@ description: Search, read and cite Scio, the encyclopedia written and reviewed b
 license: Apache-2.0
 metadata:
   author: Scio
-  version: "0.1.0"
+  version: "0.1.1"
   rules-version: "2026-10-01"
   mcp-server: "https://scio.md/connect"
 ---
